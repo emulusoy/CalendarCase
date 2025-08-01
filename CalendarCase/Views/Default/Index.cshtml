@@ -128,161 +128,265 @@
     <script src="/calendaradmin/plugins/jquery/jquery.min.js"></script>
     <script src="/calendaradmin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/calendaradmin/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="/calendaradmin/dist/js/adminlte.min.js"></script>
     <script src="/calendaradmin/plugins/moment/moment.min.js"></script>
     <script src="/calendaradmin/plugins/fullcalendar/main.js"></script>
     <script src="/calendaradmin/dist/js/demo.js"></script>
     <script>
         $(function () {
-
-          /* initialize the external events
-           -----------------------------------------------------------------*/
-          function ini_events(ele) {
-            ele.each(function () {
-              var eventObject = {
-                title: $.trim($(this).text())
-              }
-              $(this).data('eventObject', eventObject)
-              $(this).draggable({
-                zIndex: 1070,
-                revert: true,
-                revertDuration: 0
-              })
-            })
-          }
-
-          ini_events($('#external-events div.external-event'))
-
-          /* initialize the calendar
-           -----------------------------------------------------------------*/
-          var date = new Date()
-          var d = date.getDate(),
-              m = date.getMonth(),
-              y = date.getFullYear()
-
-          var Calendar = FullCalendar.Calendar;
-          var Draggable = FullCalendar.Draggable;
-
-          var containerEl = document.getElementById('external-events');
-          var checkbox = document.getElementById('drop-remove');
-          var calendarEl = document.getElementById('calendar');
-
-          new Draggable(containerEl, {
-            itemSelector: '.external-event',
-            eventData: function (eventEl) {
-              return {
-                title: eventEl.innerText,
-                backgroundColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
-                borderColor: window.getComputedStyle(eventEl, null).getPropertyValue('background-color'),
-                textColor: window.getComputedStyle(eventEl, null).getPropertyValue('color'),
-              };
-            }
-          });
-
-          var calendar = new Calendar(calendarEl, {
-            headerToolbar: {
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            themeSystem: 'bootstrap',
-            events: [
-              {
-                title: 'All Day Event',
-                start: new Date(y, m, 1),
-                backgroundColor: '#f56954',
-                borderColor: '#f56954',
-                allDay: true
-              },
-              {
-                title: 'Long Event',
-                start: new Date(y, m, d - 5),
-                end: new Date(y, m, d - 2),
-                backgroundColor: '#f39c12',
-                borderColor: '#f39c12'
-              },
-              {
-                title: 'Meeting',
-                start: new Date(y, m, d, 10, 30),
-                allDay: false,
-                backgroundColor: '#0073b7',
-                borderColor: '#0073b7'
-              },
-              {
-                title: 'Lunch',
-                start: new Date(y, m, d, 12, 0),
-                end: new Date(y, m, d, 14, 0),
-                allDay: false,
-                backgroundColor: '#00c0ef',
-                borderColor: '#00c0ef'
-              },
-              {
-                title: 'Birthday Party',
-                start: new Date(y, m, d + 1, 19, 0),
-                end: new Date(y, m, d + 1, 22, 30),
-                allDay: false,
-                backgroundColor: '#00a65a',
-                borderColor: '#00a65a'
-              },
-              {
-                title: 'Click for Google',
-                start: new Date(y, m, 28),
-                end: new Date(y, m, 29),
-                url: 'https://www.google.com/',
-                backgroundColor: '#3c8dbc',
-                borderColor: '#3c8dbc'
-              }
-            ],
-            editable: true,
-            droppable: true,
-            drop: function (info) {
-              if (checkbox.checked) {
-                info.draggedEl.parentNode.removeChild(info.draggedEl);
-              }
-            }
-          });
-
-          calendar.render();
-
-          /* ADDING EVENTS TO DATABASE + VIEW */
-          $('#add-new-event').click(function (e) {
-            e.preventDefault();
-
-            var val = $('#new-event').val();
-            var colorClass = $('#color-select').val();
-
-            if (val.length === 0 || colorClass.length === 0) {
-              alert("Lütfen başlık ve renk seçiniz.");
-              return;
+            function ini_events(ele) {
+                ele.each(function () {
+                    var eventObject = {
+                        title: $.trim($(this).text())
+                    };
+                    $(this).data('eventObject', eventObject);
+                    $(this).draggable({
+                        zIndex: 1070,
+                        revert: true,
+                        revertDuration: 0
+                    });
+                });
             }
 
-            $.ajax({
-              type: 'POST',
-              url: '/Event/AddEvent',
-              data: {
-                title: val,
-                color: colorClass
-              },
-              success: function (response) {
-                if (response.success) {
-                  var newEvent = $('<div />')
-                    .addClass('external-event ' + response.color + ' text-white px-3 py-2 rounded shadow-sm')
-                    .text(response.name);
+            ini_events($('#external-events div.external-event'));
 
-                  $('#external-events').prepend(newEvent);
-                  ini_events(newEvent);
-                  $('#new-event').val('');
-                } else {
-                  alert("Sunucu hata döndürdü.");
+            var Calendar = FullCalendar.Calendar;
+            var Draggable = FullCalendar.Draggable;
+
+            var containerEl = document.getElementById('external-events');
+            var checkbox = document.getElementById('drop-remove');
+            var calendarEl = document.getElementById('calendar');
+
+            new Draggable(containerEl, {
+                itemSelector: '.external-event',
+                eventData: function (eventEl) {
+                    return {
+                        title: eventEl.innerText.trim(),
+                        backgroundColor: eventEl.getAttribute('data-color') || window.getComputedStyle(eventEl).getPropertyValue('background-color'),
+                        borderColor: eventEl.getAttribute('data-color') || window.getComputedStyle(eventEl).getPropertyValue('background-color'),
+                        textColor: window.getComputedStyle(eventEl).getPropertyValue('color'),
+                        extendedProps: {
+                            categoryId: eventEl.getAttribute('data-category-id'),
+                            description: eventEl.getAttribute('data-description') || ""
+                        }
+                    };
                 }
-              },
-              error: function () {
-                alert("İstek başarısız oldu.");
-              }
             });
-          });
-        })
-    </script>
 
+            var calendar = new Calendar(calendarEl, {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                themeSystem: 'bootstrap',
+                editable: true,
+                droppable: true,
+
+                forceEventDuration: true,
+                defaultTimedEventDuration: '01:00',
+
+                timeZone: 'UTC',
+                events: function (fetchInfo, successCallback, failureCallback) {
+                    fetch('/Default/GetEvents')
+                        .then(response => response.json())
+                        .then(data => {
+                            successCallback(data);
+                        })
+                        .catch(() => {
+                            alert('Etkinlikler yüklenirken hata oluştu.');
+                            failureCallback([]);
+                        });
+                },
+
+                eventReceive: function (info) {
+                    const event = info.event;
+                    const start = event.start;
+                    const end = event.end;
+
+                    fetch("/Default/AddEvent", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            title: event.title,
+                            color: event.backgroundColor,
+                            description: event.extendedProps.description,
+                            start: start.toISOString(),
+                            end: end ? end.toISOString() : null,
+                            categoryId: parseInt(event.extendedProps.categoryId),
+                            allDay: info.event.allDay
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.status) {
+                            console.error("Backend Hatası:", data);
+                            alert("Etkinlik kaydedilirken hata oluştu: " + (data.message || "Bilinmeyen hata"));
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Fetch Hatası:", err);
+                        alert("Sunucuya bağlanırken hata oluştu.");
+                    });
+                },
+
+                eventDrop: function (info) {
+                    const event = info.event;
+                    const eventId = event.id;
+
+                    const eventData = {
+                        Id: eventId,
+                        Start: event.start.toISOString(),
+                        End: event.end ? event.end.toISOString() : null,
+                        AllDay: event.allDay
+                    };
+
+                    console.log("eventDrop - Gönderilen veri:", eventData);
+
+                    fetch("/Default/UpdateEvent", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(eventData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.status) {
+                            alert('Etkinlik güncellenirken hata oluştu: ' + (data.message || "Bilinmeyen hata"));
+                            info.revert();
+                        }
+                    })
+                    .catch(err => {
+                            console.error("Hata:", err);
+                            alert('Sunucuya bağlanırken hata oluştu.');
+                            info.revert();
+                    });
+                },
+
+                eventResize: function (info) {
+                    const event = info.event;
+                    const eventId = event.id;
+
+                    const eventData = {
+                        Id: eventId,
+                        Start: event.start.toISOString(),
+                        End: event.end ? event.end.toISOString() : null,
+                        AllDay: event.allDay
+                    };
+
+                    console.log("eventResize - Gönderilen veri:", eventData);
+
+                    fetch("/Default/UpdateEvent", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(eventData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.status) {
+                            alert('Etkinlik bitiş tarihi güncellenirken hata oluştu: ' + (data.message || "Bilinmeyen hata"));
+                            info.revert();
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Hata:", err);
+                        alert('Sunucuya bağlanırken hata oluştu.');
+                        info.revert();
+                    });
+                },
+
+                // Etkinlik sürükleme durduğunda çalışır
+                eventDragStop: function(info) {
+                    const trashEl = $('#delete-zone');
+                    const mouseX = info.jsEvent.pageX;
+                    const mouseY = info.jsEvent.pageY;
+
+                    const trashOffset = trashEl.offset();
+                    const trashWidth = trashEl.outerWidth();
+                    const trashHeight = trashEl.outerHeight();
+
+                    // Fare koordinatlarının silme alanının içinde olup olmadığını kontrol et
+                    const inTrashZone =
+                        mouseX >= trashOffset.left &&
+                        mouseX <= trashOffset.left + trashWidth &&
+                        mouseY >= trashOffset.top &&
+                        mouseY <= trashOffset.top + trashHeight;
+
+                    if (inTrashZone) {
+                        if (confirm("Bu etkinliği silmek istediğinizden emin misiniz?")) {
+                            const eventId = info.event.id;
+                            fetch("/Default/DeleteEvent", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(parseInt(eventId))
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status) {
+                                    info.event.remove(); // Takvimden etkinliği kaldır
+                                    alert("Etkinlik başarıyla silindi.");
+                                } else {
+                                    alert('Etkinlik silinirken hata oluştu: ' + data.message);
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Hata:", err);
+                                alert('Sunucuya bağlanırken hata oluştu.');
+                                info.revert();
+                            });
+                        } else {
+                            info.revert(); // Kullanıcı vazgeçerse etkinliği geri al
+                        }
+                    }
+                }
+            });
+
+            calendar.render();
+
+            $('#add-new-event').click(function (e) {
+                e.preventDefault();
+                var val = $('#new-event').val();
+                var colorClass = $('#color-select').val();
+
+                if (val.length === 0 || colorClass.length === 0) {
+                    alert("Lütfen başlık ve renk seçiniz.");
+                    return;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Event/AddEvent',
+                    data: {
+                        title: val,
+                        color: colorClass
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            var newEvent = $('<div />')
+                                .addClass('external-event ' + response.color + ' text-white px-3 py-2 rounded shadow-sm')
+                                .text(response.name);
+
+                            $('#external-events').prepend(newEvent);
+                            ini_events(newEvent);
+                            $('#new-event').val('');
+                        } else {
+                            alert("Sunucu hata döndürdü.");
+                        }
+                    },
+                    error: function () {
+                        alert("İstek başarısız oldu.");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
