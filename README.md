@@ -22,9 +22,9 @@ CRUD Operasyonları: Etkinlikler için Create (Oluşturma), Read (Okuma), Update
 
 
 Teknolojiler
-Backend: ASP.NET Core 5.0 (veya daha yeni), C#
+Backend: ASP.NET Core 
 
-Veritabanı: Microsoft SQL Server (veya Entity Framework Core destekli herhangi bir veritabanı)
+Veritabanı: Microsoft SQL Server
 
 ORM: Entity Framework Core
 
