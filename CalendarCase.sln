@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalendarCase", "CalendarCase\CalendarCase.csproj", "{A65A3C81-2E28-4E87-AB48-1A7B38BCDB07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A65A3C81-2E28-4E87-AB48-1A7B38BCDB07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A65A3C81-2E28-4E87-AB48-1A7B38BCDB07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A65A3C81-2E28-4E87-AB48-1A7B38BCDB07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A65A3C81-2E28-4E87-AB48-1A7B38BCDB07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09C47923-D506-448B-919A-8CB6E89519AB}
+	EndGlobalSection
+EndGlobal

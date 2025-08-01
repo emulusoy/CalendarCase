@@ -1,0 +1,112 @@
+﻿<style>
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        background-color: #ffffff;
+    }
+
+    .card-header {
+        background-color: #f5f7fb;
+        border-bottom: 1px solid #e0e6ed;
+        border-radius: 12px 12px 0 0;
+        padding: 1rem 1.5rem;
+    }
+
+    .card-title {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #2c3e50;
+    }
+
+    .external-event {
+        padding: 8px 14px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: grab;
+        color: #fff;
+    }
+
+    .bg-primary {
+        background-color: #4e73df !important;
+    }
+
+    .bg-warning {
+        background-color: #f6c23e !important;
+    }
+
+    .bg-success {
+        background-color: #1cc88a !important;
+    }
+
+    .bg-info {
+        background-color: #36b9cc !important;
+    }
+
+    .bg-danger {
+        background-color: #e74a3b !important;
+    }
+
+    .bg-secondary {
+        background-color: #858796 !important;
+    }
+
+    .form-control,
+    .btn {
+        border-radius: 8px;
+    }
+
+    #color-select option {
+        padding: 5px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="card shadow rounded-lg mb-4">
+    <div class="card-header bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
+        <h4 class="card-title mb-0">Draggable Events</h4>
+    </div>
+    <div class="card-body p-4 bg-light">
+        <div id="external-events" class="d-grid gap-2">
+            <div class="external-event bg-gradient bg-teal text-white px-3 py-2 rounded shadow-sm">Lunch</div>
+            <div class="external-event bg-gradient bg-amber text-dark px-3 py-2 rounded shadow-sm">Go home</div>
+            <div class="external-event bg-gradient bg-sky text-white px-3 py-2 rounded shadow-sm">Do homework</div>
+            <div class="external-event bg-gradient bg-indigo text-white px-3 py-2 rounded shadow-sm">Work on UI design</div>
+            <div class="external-event bg-gradient bg-rose text-white px-3 py-2 rounded shadow-sm">Sleep tight</div>
+        </div>
+        <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="drop-remove">
+            <label class="form-check-label" for="drop-remove">
+                Remove after drop
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow rounded-lg">
+    <div class="card-header bg-gradient-to-r from-green-400 via-blue-500 to-purple-500 text-white">
+        <h3 class="card-title mb-0">Create Event</h3>
+    </div>
+    <div class="card-body p-4 bg-light">
+        <div class="mb-3">
+            <input id="new-event" type="text" class="form-control" placeholder="Event Title">
+        </div>
+        <div class="mb-3">
+            <select id="color-select" class="form-select">
+                <option value="bg-teal" style="color:#20c997;">🟢 Teal</option>
+                <option value="bg-amber" style="color:#ffc107;">🟡 Amber</option>
+                <option value="bg-sky" style="color:#0dcaf0;">🔵 Sky</option>
+                <option value="bg-indigo" style="color:#6610f2;">🟣 Indigo</option>
+                <option value="bg-rose" style="color:#e83e8c;">🔴 Rose</option>
+            </select>
+        </div>
+        <button id="add-new-event" type="button" class="btn btn-gradient btn-block text-white" style="background: linear-gradient(to right, #00b4db, #0083b0);">
+            Add
+        </button>
+    </div>
+</div>
+
