@@ -16,7 +16,8 @@ CRUD Operasyonları: Etkinlikler için Create (Oluşturma), Read (Okuma), Update
 
 
 
-<img width="2560" height="1692" alt="screencapture-localhost-7048-2025-08-01-16_57_35" src="https://github.com/user-attachments/assets/ee5b462a-c6d7-4e64-9f83-ea529457feb1" />
+
+<img width="2560" height="1692" alt="screencapture-localhost-7048-2025-08-01-17_01_58" src="https://github.com/user-attachments/assets/e7f31e9e-e402-4403-97d7-63d335087fba" />
 
 
 
