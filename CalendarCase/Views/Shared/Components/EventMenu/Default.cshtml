@@ -1,4 +1,5 @@
-﻿<style>
+﻿@model List<Category>
+<style>
     .card {
         border: none;
         border-radius: 12px;
@@ -31,29 +32,26 @@
         color: #fff;
     }
 
-    .bg-primary {
-        background-color: #4e73df !important;
+    .bg-teal {
+        background-color: #20c997 !important;
     }
 
-    .bg-warning {
-        background-color: #f6c23e !important;
+    .bg-amber {
+        background-color: #ffc107 !important;
     }
 
-    .bg-success {
-        background-color: #1cc88a !important;
+    .bg-sky {
+        background-color: #0dcaf0 !important;
     }
 
-    .bg-info {
-        background-color: #36b9cc !important;
+    .bg-indigo {
+        background-color: #6610f2 !important;
     }
 
-    .bg-danger {
-        background-color: #e74a3b !important;
+    .bg-rose {
+        background-color: #e83e8c !important;
     }
 
-    .bg-secondary {
-        background-color: #858796 !important;
-    }
 
     .form-control,
     .btn {
@@ -72,11 +70,16 @@
     </div>
     <div class="card-body p-4 bg-light">
         <div id="external-events" class="d-grid gap-2">
-            <div class="external-event bg-gradient bg-teal text-white px-3 py-2 rounded shadow-sm">Lunch</div>
-            <div class="external-event bg-gradient bg-amber text-dark px-3 py-2 rounded shadow-sm">Go home</div>
-            <div class="external-event bg-gradient bg-sky text-white px-3 py-2 rounded shadow-sm">Do homework</div>
-            <div class="external-event bg-gradient bg-indigo text-white px-3 py-2 rounded shadow-sm">Work on UI design</div>
-            <div class="external-event bg-gradient bg-rose text-white px-3 py-2 rounded shadow-sm">Sleep tight</div>
+            @foreach (var item in Model)
+            {
+                <div class="external-event @item.Color text-white px-3 py-2 rounded shadow-sm">@item.Name</div>
+
+
+                <input type="hidden" class="event-category-id" value="@item.Id" />
+                <input type="hidden" class="event-category-id" value="@item.Description" />
+                <input type="hidden" class="event-category-id" value="@item.Color" />
+            }
+
         </div>
         <div class="form-check mt-3">
             <input class="form-check-input" type="checkbox" id="drop-remove">
@@ -109,4 +112,3 @@
         </button>
     </div>
 </div>
-
